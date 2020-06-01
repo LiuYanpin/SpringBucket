@@ -1,4 +1,4 @@
-package geektime.spring.mongodemo;
+package geektime.spring.mongodemo.converter;
 
 import org.bson.Document;
 import org.joda.money.CurrencyUnit;
