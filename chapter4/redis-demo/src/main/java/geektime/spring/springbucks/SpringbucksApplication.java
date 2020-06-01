@@ -1,5 +1,7 @@
 package geektime.spring.springbucks;
 
+import geektime.spring.springbucks.converter.BytesToMoneyConverter;
+import geektime.spring.springbucks.converter.MoneyToBytesConverter;
 import geektime.spring.springbucks.model.Coffee;
 import geektime.spring.springbucks.service.CoffeeService;
 import io.lettuce.core.ReadFrom;
@@ -12,16 +14,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.convert.RedisCustomConversions;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableJpaRepositories
+@EnableRedisRepositories
 public class SpringbucksApplication implements ApplicationRunner {
 	@Autowired
 	private CoffeeService coffeeService;
@@ -31,15 +35,15 @@ public class SpringbucksApplication implements ApplicationRunner {
 	}
 
 	@Bean
-	public RedisTemplate<String, Coffee> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-		RedisTemplate<String, Coffee> template = new RedisTemplate<>();
-		template.setConnectionFactory(redisConnectionFactory);
-		return template;
+	public LettuceClientConfigurationBuilderCustomizer customizer() {
+		return clientConfigurationBuilder -> clientConfigurationBuilder.readFrom(ReadFrom.MASTER_PREFERRED);
 	}
 
 	@Bean
-	public LettuceClientConfigurationBuilderCustomizer customizer() {
-		return clientConfigurationBuilder -> clientConfigurationBuilder.readFrom(ReadFrom.MASTER_PREFERRED);
+	public RedisCustomConversions redisCustomConversions() {
+		return new RedisCustomConversions(
+				Arrays.asList(new MoneyToBytesConverter(), new BytesToMoneyConverter())
+		);
 	}
 
 	@Override
