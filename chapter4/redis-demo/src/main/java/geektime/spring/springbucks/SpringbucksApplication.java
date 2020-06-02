@@ -48,11 +48,11 @@ public class SpringbucksApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		Optional<Coffee> mocha = coffeeService.findOneCoffee("mocha");
+		Optional<Coffee> mocha = coffeeService.findSimpleCoffeeFromCache("mocha");
 		log.info("Coffee {}", mocha);
 		for (int i = 0; i < 5; i++) {
-			log.info("Value from Redis: {}", coffeeService.findOneCoffee("mocha"));
-
+			mocha = coffeeService.findSimpleCoffeeFromCache("mocha");
 		}
+		log.info("Value from Redis: {}", mocha);
 	}
 }

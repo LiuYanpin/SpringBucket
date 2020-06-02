@@ -37,7 +37,7 @@ public class CoffeeService {
                     .name(coffeeCache.getName())
                     .price(coffeeCache.getPrice())
                     .build();
-            log.info("Coffee {} found i cache.", coffeeCache);
+            log.info("Coffee {} found in cache.", coffeeCache);
             return Optional.of(coffee);
         } else {
             Optional<Coffee> raw = findOneCoffee(name);
