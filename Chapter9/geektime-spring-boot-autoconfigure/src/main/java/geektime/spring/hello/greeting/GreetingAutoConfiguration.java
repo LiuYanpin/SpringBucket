@@ -1,6 +1,5 @@
-package geektime.spring.hello.geektimespringbootautoconfigure;
+package geektime.spring.hello.greeting;
 
-import geektime.spring.hello.greeting.GreetingApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
